@@ -1,0 +1,127 @@
+﻿@model IEnumerable<OrderProcessingSystem.Models.Product>
+@{
+    ViewData["Title"] = "Create Order";
+}
+
+<h2>Create Order</h2>
+<div class="container mt-5">
+    <form id="order-form" method="post" action="Create">
+        <div id="orderItemsContainer">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in Model)
+                    {
+                        <tr>
+                            <td>@product.Name</td>
+                            <td>@product.Price.ToString("C")</td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="number" class="form-control" id="Quantity_@product.ProductId" name="Quantity_@product.ProductId" data-id="Quantity_@product.ProductId" value="1" min="1" max="10" required />
+                                </div>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-success add-item-btn" data-id="@product.ProductId">Add Item</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <input type="hidden" id="order-data" name="OrderData" />
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">Place Order</button>
+            <a asp-controller="Customer" asp-action="Index" class="back-link btn btn-primary btn-lg">Back to List</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+
+            $(document).ready(function () {
+            let items = [];
+            $('.add-item-btn').click(function (e) {
+              let id = $(this).data('id');
+              e.preventDefault();
+              if( $(this).text()=="Add Item")
+              {
+               let quantity= parseInt($('#Quantity_'+id).val());
+
+
+            items.push({ ProductId: id, Quantity: quantity });
+            $(this).text("Remove Item");
+              }
+              else
+              {
+                let indexToRemove = items.findIndex(item => item.ProductId === id);
+            if (indexToRemove !== -1) {
+                 items.splice(indexToRemove, 1);
+        }
+         $(this).text("Add Item");
+              }
+            });
+            $('#order-form').on('submit', function (e) {
+                if(items.length==0)
+                {
+                e.preventDefault();
+                alert("Please add product");
+                }
+                else{
+                $('#order-data').val(JSON.stringify(items));
+                }
+            });
+
+        });
+
+    </script>
+
+}
+<style type="text/css">
+
+    #orderItemsContainer {
+        margin-top: 20px;
+    }
+
+    .table th, .table td {
+        text-align: center;
+    }
+
+    .add-item-btn {
+        width: 100%;
+    }
+
+    #order-form {
+        margin-top: 30px;
+    }
+
+    #order-data {
+        display: none;
+    }
+
+    form {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    table {
+        margin-top: 20px;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+</style>

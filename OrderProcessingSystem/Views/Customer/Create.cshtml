@@ -1,0 +1,59 @@
+﻿@model OrderProcessingSystem.Models.Customer
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container">
+    <h4>Create Customer</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-6 offset-md-3 form-container">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">Customer Name</label>
+                    <input asp-for="Name" class="form-control" placeholder="Enter customer name" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary btn-block" />
+                    <a asp-action="Index" class="back-link btn btn-secondary">Back to List</a>
+                </div>
+            </form>
+        </div>
+       
+
+    </div>
+
+  
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style>
+    .container {
+        margin-top: 50px;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-container {
+        background-color: #f8f9fa;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-link {
+        display: inline-block;
+    }
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
